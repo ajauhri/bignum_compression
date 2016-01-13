@@ -10,11 +10,8 @@ from extras.ppm import cal_probs
 import extras.helpers as helpers
 import extras.const as const
 import extras.entropy as entropy
-import ae.ae as ae
 import heuristic.heuristic as heuristic
-import std_methods.lzma as lzma
 import std_methods.gzip as gzip
-import huffman.huffman as huffman
 import math
 import lzw.lzw as lzw
 import vle.vle as vle
@@ -34,8 +31,6 @@ def start():
     parser = OptionParser()
     parser.add_option('-i', '--input', dest='ifile', help='input file')
     parser.add_option('-n', '--number', dest='num_to_read', help='number of polygongs to read', type='int')
-    parser.add_option('-a', '--ae', action="store_true", dest='ae_enabled', default=False, help="enable arithmetic encoding") 
-    parser.add_option('-t', '--huffman', action="store_true", dest='huffman_enabled', default=False, help="enable huffman encoding") 
     parser.add_option('-p', '--pe', action="store_true", dest='plots_enabled', default=False, help="generate plots") 
     (options, args) = parser.parse_args()
 
@@ -75,8 +70,6 @@ def start():
         options.num_to_read = len(del_polygons)
     if options.num_to_read > len(data_rows):
         options.num_to_read = len(data_rows)
-    opt_out = file('./results/huffman.csv', 'w') 
-    opt_out.write('points,huffman_del,big_del,var_del,huffman_diff,big_diff,var_diff\n')
     all_out = file('./results/all.csv', 'w')
     all_out.write('id,' + \
             'points,' + \
@@ -117,7 +110,6 @@ def start():
         lzw_del_encoding = lzw.encode(del_polygons[i], base)
                  
         #Consecutive delta based i.e. x1, y1, x2-x1, y2-y1, x3-x2, y3-y2...  on the original coordinates
-        lzma_encoding = ""#lzma.encode(orig_poly)
         gzip_diff_encoding = gzip.encode(diff_polygons[i])
         assert diff_polygons[i] == vle.invert_golomb_trans(golomb_diff_encodings[i]['encoding'], base, 5)
         big_diff_encoding = heuristic.big_encode(diff_polygons[i], data_rows[i]['vertices']  - 2, base, True)
@@ -174,7 +166,6 @@ def start():
             badwin += 1
     print bigwin, badwin
     all_out.close()
-    opt_out.close()
     helpers.write_summary('./results/delta_summary', stats, algos, '_del_') 
     helpers.write_summary('./results/diff_summary', stats, algos, '_diff_') 
     if options.plots_enabled:

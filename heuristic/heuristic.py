@@ -27,22 +27,19 @@ def big_encode(delta_str, n_vertices, base, m=False):
     Dx_min  = int(delta_arr[0])
     Dy_min = int(delta_arr[1])
     big_num = 0
-    S = max(x_delta, y_delta)
-    SS = S  + 2
+    M = max(x_delta, y_delta) + 2
     
     for i in xrange(n_vertices):
         if i == 0:
-            big_num = big_num*SS*SS + (d_x[i] + 1)*SS + d_y[i] + 1
+            big_num = big_num * M * M + (d_x[i] + 1) * M + d_y[i] + 1
         else:
-            big_num = big_num*SS*SS + (d_x[i])*SS + d_y[i] 
+            big_num = big_num * M * M + (d_x[i]) * M + d_y[i] 
     big_num = big_num*const.x_factor + Dx_min
     big_num = big_num*const.y_factor + Dy_min
-    SS_encode = helpers.base_encode(SS, base)
-    big_str = SS_encode + helpers.base_encode(big_num, base) # prefix and postfix not appended
-    return {'big_str': big_str, 'big_num': big_num, 'SS': SS, 'bit_len': big_num.bit_length() + SS.bit_length(), 'len': len(big_str) - len(SS_encode) + 2}
+    M_encode = helpers.base_encode(M-2, base)
+    big_str = M_encode + helpers.base_encode(big_num, base) # prefix and postfix not appended
     if big_decode(big_str, coords, base, m):
-        #print len(bin(helpers.base_decode(big_str, base))) - 2, big_num.bit_length() + S.bit_length()
-        return {'big_str': big_str, 'big_num': big_num, 'SS': SS, 'bit_len': big_num.bit_length() + SS.bit_length()}
+        return {'big_str': big_str, 'big_num': big_num, 'SS': M, 'bit_len': big_num.bit_length() + M.bit_length(), 'len': len(big_str) - len(M_encode) + 2}
     else:
         return False
 
@@ -58,30 +55,27 @@ def big_decode(big_str, coords, base, m):
         True if the decoded list of delta coordinates matches original delta coordinates `coords`. 
         False otherwise.
     """
-    S = helpers.base_decode(big_str[:1], base)
-    if not m and S > 30:
-        SS = (S - 30)*10 + 30 + 2
-    elif m and S > 30:
-        SS = (S - 30)*17 + 30 + 2
-    else:
+    for i in [1,2]:
+        S = helpers.base_decode(big_str[:i], base)
         SS = S + 2
-    big_num = helpers.base_decode(big_str[1:], base)
-    z = big_num/const.y_factor
-    Dy_min = big_num - const.y_factor * z 
-    big_num = z
-    z = big_num/const.x_factor
-    Dx_min = big_num - const.x_factor * z
-    big_num = z
-    deltas = []
-    flagged = False
-    while big_num > 0:
-        m = big_num % SS 
-        big_num = big_num / SS
-        deltas.append(int(m))
-    deltas = deltas[::-1]
-    deltas[0] -= 1
-    deltas[1] -= 1
-    return deltas == coords
+        big_num = helpers.base_decode(big_str[i:], base)
+        z = big_num/const.y_factor
+        Dy_min = big_num - const.y_factor * z 
+        big_num = z
+        z = big_num/const.x_factor
+        Dx_min = big_num - const.x_factor * z
+        big_num = z
+        deltas = []
+        flagged = False
+        while big_num > 0:
+            m = big_num % SS 
+            big_num = big_num / SS
+            deltas.append(int(m))
+        deltas = deltas[::-1]
+        deltas[0] -= 1
+        deltas[1] -= 1
+        if deltas == coords:
+            return True
 
 def poly_encode(delta_str, n_vertices, base):
     result = ''
