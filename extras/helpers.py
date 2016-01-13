@@ -1,6 +1,5 @@
 import const
 import numpy as np
-import all_plots as ap
 
 def setup_base():
     encode_values=[0]*256
@@ -196,34 +195,3 @@ def write_summary(fname, d, algos, trans):
         algo += trans
         fd.write("%s & %d & %.1f & %d & %.1f & %.1f & %.1f & %.1f & %.1f & %.1f & %.1f\n" % (algo, np.min(d[algo+len]), np.mean(d[algo+len]), np.max(d[algo+len]), np.std(d[algo+len]), np.percentile(d[algo+len], 95), np.min(d[algo+cr])*100, np.mean(d[algo+cr])*100, np.max(d[algo+cr])*100, np.std(d[algo+cr])*100, np.percentile(d[algo+cr], 95)*100))
     fd.close()
-
-
-def get_plots(rows):
-    ap.plot_poly_length(rows)
-    ap.plot_deltas_length(rows)
-    ap.plot_diff_length(rows)
-    ap.plot_deltas_x(rows)
-    ap.plot_deltas_y(rows)
-    ap.plot_diff_x(rows)
-    ap.plot_diff_y(rows)
-    ap.plot_diff_x_w_negs(rows)
-    ap.plot_diff_y_w_negs(rows)
-    ap.plot_xmin(rows)
-    ap.plot_ymin(rows)
-    ap.plot_poly_vertices_count(rows)
-    ap.plot_x1(rows)
-    ap.plot_y1(rows)
-
-def get_cmam_text(ifile):
-    fd = file(ifile, 'r')
-    result = []
-    for line in fd.readlines():
-        id = int(line.split('|')[0])
-        xml = line.split('|')[6]
-        s = xml.rfind('CMAMtext')
-        if s > 0:
-            t = xml[s:].find('<value>')
-            e = xml[s+t:].find('</value>')
-            result.append((id, xml[s+t+len('<value>'):s+t+e]))
-    return result
-            

@@ -56,8 +56,8 @@ def big_decode(big_str, coords, base, m):
         False otherwise.
     """
     for i in [1,2]:
-        S = helpers.base_decode(big_str[:i], base)
-        SS = S + 2
+        M = helpers.base_decode(big_str[:i], base)
+        M = M + 2
         big_num = helpers.base_decode(big_str[i:], base)
         z = big_num/const.y_factor
         Dy_min = big_num - const.y_factor * z 
@@ -68,73 +68,11 @@ def big_decode(big_str, coords, base, m):
         deltas = []
         flagged = False
         while big_num > 0:
-            m = big_num % SS 
-            big_num = big_num / SS
+            m = big_num % M
+            big_num = big_num / M
             deltas.append(int(m))
         deltas = deltas[::-1]
         deltas[0] -= 1
         deltas[1] -= 1
         if deltas == coords:
             return True
-
-def poly_encode(delta_str, n_vertices, base):
-    result = ''
-    mins = []
-    reserve_chars = ['%','@','!','+','=','^']
-    deltas = np.array(delta_str.split(',')[2:], dtype='int')
-    mins.append(int(delta_str.split(',')[0]))
-    mins.append(int(delta_str.split(',')[1]))
-    for i in range(2):
-        q = mins[i]/base
-        r = mins[i] - base*q
-        if q > base:
-            result += reserve_chars[int(q/base) - 1] + helpers.base_encode(q % base, base) + helpers.base_encode(r, base)
-        else:
-            result += helpers.base_encode(q, base) + helpers.base_encode(r, base)
-    assert len(result) == 5
-    big_num = 0
-    delta_arr = delta_str.split(',')
-    n_to_skip = 2 #since the min and max are appended to the beginning of the polygon argument
-    coords = map(int, delta_arr[n_to_skip:])
-    d_x = [coords[2*i] for i in range(n_vertices)]
-    d_y = [coords[2*i + 1] for i in range(n_vertices)]
-    x_delta = max(d_x) - min(d_x)
-    y_delta = max(d_y) - min(d_y)
- 
-    Dx_min  = int(delta_arr[0])
-    Dy_min = int(delta_arr[1])
-    
-    S = max(x_delta, y_delta)/10 + 1
-    SS = 10*S + 1
-    for i in xrange(n_vertices):
-        big_num = big_num*SS*SS + (d_x[i] + 1)*SS + (d_y[i] + 1)
-    big_str = result + helpers.base_encode(S, base) + helpers.base_encode(big_num, base)
-    return big_str
-
-def point_encode(poly_str, b):
-    coords = poly_str.split(',')
-    combs = []
-    all_rems = []
-    l = 0
-    for i in xrange(0, len(coords), 2):
-        lat = int(coords[i])
-        longt = int(coords[i+1])
-        combs.append(((lat + longt)* (lat + longt + 1)/2) + lat)
-        n = combs[-1]
-        rems = []
-        if n == 0:
-            rems = [0]
-        while n:
-            rems.append(n%32)
-            n = n/32
-        rems = map(lambda x: x+32, rems)
-        rems[-1] = rems[-1] - 32
-        if i == 0:
-            l += 6
-        else:
-            if len(rems) < 3:
-                l += len(rems) + 1
-            else:
-                l += 3
-        all_rems.append(rems)
-    return l

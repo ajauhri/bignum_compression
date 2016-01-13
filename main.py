@@ -6,10 +6,8 @@ To run with first `n` WEAs:  ./main.py -i <foobar>.csv -n <number_of_WEAs_to_be_
 
 from __future__ import division
 from optparse import OptionParser
-from extras.ppm import cal_probs
 import extras.helpers as helpers
 import extras.const as const
-import extras.entropy as entropy
 import heuristic.heuristic as heuristic
 import std_methods.gzip as gzip
 import math
@@ -148,18 +146,6 @@ def start():
         stats['o_bar' + '_diff_' + 'cr'].append(o_bar_len/orig_len)
         points = (data_rows[i]['vertices'] - 1)*2
         all_out.write("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f\n" % (data_rows[i]['id'], data_rows[i]['vertices'], orig_len, del_len, diff_len, len(lzw_del_encoding), len(big_del_encoding['big_str']), len(golomb_del_encodings[i]['encoding']), len(lzw_diff_encoding), len(big_diff_encoding['big_str']), len(golomb_diff_encodings[i]['encoding']), big_diff_encoding['bit_len']/points, golomb_diff_encodings[i]['bit_len']/points, big_del_encoding['bit_len']/(points+2), golomb_del_encodings[i]['bit_len']/(points+2)))
-        '''
-        print 'orig polygon:', data_rows[i]['orig_poly']
-        print 'del polygon:', del_polygons[i]
-        print 'diff polygon:', diff_polygons[i]
-        print 'big num del:', big_del_encoding['big_num']
-        print 'big num diff:', big_diff_encoding['big_num']
-        print 'big str del:', big_del_encoding['big_str']
-        print 'big num diff:', big_diff_encoding['big_str']
-        print '***'
-        '''
-        #print i+1, (2*(data_rows[i]['vertices']-1)*math.log(big_del_encoding['SS'], 2) +  math.log(const.x_factor, 2) + math.log(const.y_factor, 2))/math.log(70,2) + 2, big_diff_encoding['len']
-
         if big_del_encoding['bit_len']/points <= golomb_del_encodings[i]['bit_len']/points:
             bigwin += 1
         else:
