@@ -28,7 +28,6 @@ def big_encode(delta_str, n_vertices, base, m=False):
     Dy_min = int(delta_arr[1])
     big_num = 0
     M = max(x_delta, y_delta) + 2
-    
     for i in xrange(n_vertices):
         if i == 0:
             big_num = big_num * M * M + (d_x[i] + 1) * M + d_y[i] + 1
@@ -36,10 +35,10 @@ def big_encode(delta_str, n_vertices, base, m=False):
             big_num = big_num * M * M + (d_x[i]) * M + d_y[i] 
     big_num = big_num*const.x_factor + Dx_min
     big_num = big_num*const.y_factor + Dy_min
-    M_encode = helpers.base_encode(M-2, base)
+    M_encode = helpers.base_encode(M - 2, base)
     big_str = M_encode + helpers.base_encode(big_num, base) # prefix and postfix not appended
     if big_decode(big_str, coords, base, m):
-        return {'big_str': big_str, 'big_num': big_num, 'SS': M, 'bit_len': big_num.bit_length() + M.bit_length(), 'len': len(big_str) - len(M_encode) + 2}
+        return {'big_str': big_str, 'big_num': big_num, 'M': M, 'bit_len': big_num.bit_length() + M.bit_length(), 'len': len(big_str) - len(M_encode) + 2}
     else:
         return False
 

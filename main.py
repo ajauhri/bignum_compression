@@ -29,7 +29,6 @@ def start():
     parser = OptionParser()
     parser.add_option('-i', '--input', dest='ifile', help='input file')
     parser.add_option('-n', '--number', dest='num_to_read', help='number of polygongs to read', type='int')
-    parser.add_option('-p', '--pe', action="store_true", dest='plots_enabled', default=False, help="generate plots") 
     (options, args) = parser.parse_args()
 
     if not options.ifile:
@@ -99,7 +98,7 @@ def start():
             stats[algo + t + '_len'] = []
             stats[algo + t + '_cr'] = []
     bigwin = 0
-    badwin = 0
+    golwin = 0
     for i in range(options.num_to_read):
         assert del_polygons[i] == vle.invert_golomb_trans(golomb_del_encodings[i]['encoding'], base, 5)
         big_del_encoding = heuristic.big_encode(del_polygons[i], data_rows[i]['vertices'] - 1, base)
@@ -149,13 +148,11 @@ def start():
         if big_del_encoding['bit_len']/points <= golomb_del_encodings[i]['bit_len']/points:
             bigwin += 1
         else:
-            badwin += 1
-    print bigwin, badwin
+            golwin += 1
+    print '#instances BIG bettter: %d, #instances Golomb better: %d' % (bigwin, golwin)
     all_out.close()
     helpers.write_summary('./results/delta_summary', stats, algos, '_del_') 
     helpers.write_summary('./results/diff_summary', stats, algos, '_diff_') 
-    if options.plots_enabled:
-        helpers.get_plots(data_rows)
 
 if __name__ == "__main__":
     start()
