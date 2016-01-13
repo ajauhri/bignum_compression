@@ -5,52 +5,7 @@ import pandas
 from collections import defaultdict
 from pylab import *
 import sys
-
-def plot_all(t, labels):
-    df = pandas.read_csv('results/all.csv', skiprows=[1])
-    varrsd = []
-    var = []
-    big = []
-    orig = []
-    lzw = []
-    golomb = []
-    huffman = []
-    x = []
-    for count, row in df.iterrows():
-        x.append(row['points'])
-        big.append(row['big_' + t + '_len'])
-        varrsd.append(row['varrsd_' + t + '_len'])
-        var.append(row['var_' + t + '_len'])
-        lzw.append(row['lzw_' + t + '_len'])
-        golomb.append(row['golomb_' + t + '_len'])
-        huffman.append(row['huffman_' + t + '_len'])
-        orig.append(row['orig_len'])
-
-    x = np.array(x)
-    ind = np.argsort(x)
-    big = np.array(big)[ind]
-    varrsd = np.array(varrsd)[ind]
-    var = np.array(var)[ind]
-    lzw = np.array(lzw)[ind]
-    golomb = np.array(golomb)[ind]
-    huffman = np.array(huffman)[ind]
-    orig = np.array(orig)[ind]
-    x = x[ind]
-    colors = cm.rainbow(np.linspace(0, 1, 6))
-    huffman_l = plt.scatter(x-.4, huffman, color=colors[2], alpha=1, marker='*')
-    golomb_l = plt.scatter(x-.1, golomb, color='green', alpha=1, marker='*')
-    lzw_l = plt.scatter(x+.1, lzw, color=colors[3], alpha=1, marker='*')
-    big_l = plt.scatter(x-.2, big, color=colors[0], alpha=1, marker='+')
-    varrsd_l = plt.scatter(x+.4, varrsd, color=colors[1], alpha=1)
-    var_l = plt.scatter(x+.2, var, color=colors[5], alpha=1, marker='*')
-    orig_l = plt.scatter(x, orig, color=colors[4])
-    plt.legend((big_l, varrsd_l, var_l, orig_l, lzw_l, golomb_l, huffman_l), labels, loc='upper left')
-    plt.ylim(0, 350)
-    plt.xlim(0, 28)
-    plt.xlabel('# of points')
-    plt.ylabel('Length')
-    savefig('results/all_' + t + '.png')
-    plt.clf()
+import os
 
 def plot_best(t, labels):
     df = pandas.read_csv('results/all.csv', skiprows=[1])
@@ -75,7 +30,6 @@ def plot_best(t, labels):
         big_dict[arr_len].append(big[-1])
         golomb.append(row['golomb_' + t + '_bits'])
         golomb_dict[arr_len].append(golomb[-1])
-        import os
         if os.path.isfile('results/' + t + '_state_of_art/' + str(count+1) + '.out'):
             fd = file('results/' + t + '_state_of_art/' + str(count+1) + '.out', 'r')
             for line in fd.readlines():
@@ -83,15 +37,12 @@ def plot_best(t, labels):
                     vsimple.append(float(line.split()[3]))
                 if 'SIMDPackFPF' in line:
                     simd.append(float(line.split()[3]))
-
             fd.close()
             vsimple_dict[arr_len].append(vsimple[-1])
             simd_dict[arr_len].append(simd[-1])
         else:
             print 'error'
             break
-
-
     x = np.array(x)
     big = np.array(big)
     golomb = np.array(golomb)
@@ -135,38 +86,5 @@ def plot_best(t, labels):
     savefig('results/best2_' + t + '.png')
     plt.clf()
 
-def plot_diff(t, labels):
-    df = pandas.read_csv('results/all.csv', skiprows=[1])
-    big = []
-    golomb = []
-    x = []
-    for count, row in df.iterrows():
-        x.append(count)
-        big.append(row['big_' + t + '_bits'])
-        golomb.append(row['golomb_' + t + '_bits'])
-
-    x = np.array(x)
-    big = np.array(big)
-    golomb = np.array(golomb)
-    ind = np.argsort(x)
-    x = x[ind]
-    big = big[ind]
-    golomb = golomb[ind]
-    colors = cm.rainbow(np.linspace(0, 1, 5))
-    big_l = plt.scatter(x-.2, big, color=colors[3], alpha=1, marker='+')
-    golomb_l = plt.scatter(x+.2, golomb, color='green', alpha=1, marker='*')
-    #huffman_l = plt.scatter(x-.4, huffman, color=colors[0], alpha=1, marker='*')
-    plt.legend((big_l, golomb_l), labels, loc='upper left')
-    plt.ylim(0, 15)
-    plt.xlim(-100, 11500)
-    plt.xlabel('# of vertices', fontsize=22)
-    plt.ylabel('bits/integer', fontsize=22)
-    plt.tight_layout()
-    savefig('results/diff_' + t + '.png')
-    plt.clf()
-
-
 plot_best('diff', (r'$BIG^{\Delta}$', r'$GOL^{\Delta}$', r'$VSimple^{\Delta}$', r'$SIMDPackFPF^{\Delta}$'))
 plot_best('del', (r'$BIG^{\Delta min}$', r'$GOL^{\Delta min}$', r'$VSimple^{\Delta min}$', r'$SIMDPackFPF^{\Delta min}$'))
-#plot_diff('del', (r'$BIG^{\Delta min}$', r'$GOL^{\Delta min}$'))
-#plot_foo()
