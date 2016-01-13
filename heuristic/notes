@@ -1,4 +1,0 @@
-    - A method to use big strings into LZW was tried with 3 and 4 sliding window protocol but the frequency of the heavy hitters wasn't good to apply the static LZW 
-    - Also 3 and 4 fixed size window substrings were also found and there frequencies were also not good
-    - heuristic.py is my version of Martin's new-enc-dec-V2.py 
-    - heuristic.py needs to be integrated with ../main.py
