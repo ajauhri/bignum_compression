@@ -23,9 +23,9 @@ const.x_origin = 1600
 const.y_origin = 6000
 const.x_factor = 3500
 const.y_factor = 10000
+const.base = 70
 
-def start():
-    base = 70
+def main():
     parser = OptionParser()
     parser.add_option('-i', '--input', dest='ifile', help='input file')
     parser.add_option('-n', '--number', dest='num_to_read', help='number of polygongs to read', type='int')
@@ -88,8 +88,8 @@ def start():
     golomb_del_encodings = []
     golomb_diff_encodings = []
     for i in range(len(data_rows)):
-        golomb_del_encodings.append(vle.golomb_trans(del_polygons[i], base, 5))
-        golomb_diff_encodings.append(vle.golomb_trans(diff_polygons[i], base, 5))
+        golomb_del_encodings.append(vle.golomb_trans(del_polygons[i], const.base, 5))
+        golomb_diff_encodings.append(vle.golomb_trans(diff_polygons[i], const.base, 5))
     
     algos = ['big_factor', 'gzip', 'golomb', 'lzw', 'trans', 'o_bar']
     stats = {}
@@ -100,16 +100,21 @@ def start():
     bigwin = 0
     golwin = 0
     for i in range(options.num_to_read):
-        assert del_polygons[i] == vle.invert_golomb_trans(golomb_del_encodings[i]['encoding'], base, 5)
-        big_del_encoding = heuristic.big_encode(del_polygons[i], data_rows[i]['vertices'] - 1, base)
+        assert del_polygons[i] == vle.invert_golomb_trans(golomb_del_encodings[i]['encoding'], 
+                                                          const.base, 5)
+        big_del_encoding = heuristic.big_encode(del_polygons[i], 
+                                                data_rows[i]['vertices'] - 1, const.base)
         assert big_del_encoding != False
         gzip_del_encoding = gzip.encode(del_polygons[i])
         lzw_del_encoding = lzw.encode(del_polygons[i], base)
                  
         #Consecutive delta based i.e. x1, y1, x2-x1, y2-y1, x3-x2, y3-y2...  on the original coordinates
         gzip_diff_encoding = gzip.encode(diff_polygons[i])
-        assert diff_polygons[i] == vle.invert_golomb_trans(golomb_diff_encodings[i]['encoding'], base, 5)
-        big_diff_encoding = heuristic.big_encode(diff_polygons[i], data_rows[i]['vertices']  - 2, base, True)
+        assert diff_polygons[i] == vle.invert_golomb_trans(golomb_diff_encodings[i]['encoding'], 
+                                                           const.base, 5)
+        big_diff_encoding = heuristic.big_encode(diff_polygons[i], 
+                                                 data_rows[i]['vertices']  - 2,
+                                                 base, True)
         assert big_diff_encoding != False
         lzw_diff_encoding = lzw.encode(diff_polygons[i], base)
          
@@ -155,4 +160,4 @@ def start():
     helpers.write_summary('./results/diff_summary', stats, algos, '_diff_') 
 
 if __name__ == "__main__":
-    start()
+    main()
