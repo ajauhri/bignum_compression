@@ -13,6 +13,10 @@ Since the current work is focused on polygons from `DHS <https://www.fema.gov/fr
 
 Aggregated results after the execution of ``main.py`` can be found under the ``results`` folder in csv files.
 
+Plots can be generated post running the ``main.py`` by::
+
+    ./comparison_plots.py
+    
 Comparison
 ----------
 

@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 from __future__ import division
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,10 +22,10 @@ def plot_best(t, labels):
     simd_dict = defaultdict(list)
 
     for count, row in df.iterrows():
-        if t == 'del':
+        if t == 'delta_min':
             arr_len = row['points'] * 2
             x.append(row['points']*2)
-        elif t == 'diff':
+        elif t == 'delta':
             arr_len = (row['points']-1) * 2
             x.append(arr_len)
         big.append(row['big_' + t + '_bits'])
@@ -86,5 +88,5 @@ def plot_best(t, labels):
     savefig('results/best2_' + t + '.png')
     plt.clf()
 
-plot_best('diff', (r'$BIG^{\Delta}$', r'$GOL^{\Delta}$', r'$VSimple^{\Delta}$', r'$SIMDPackFPF^{\Delta}$'))
-plot_best('del', (r'$BIG^{\Delta min}$', r'$GOL^{\Delta min}$', r'$VSimple^{\Delta min}$', r'$SIMDPackFPF^{\Delta min}$'))
+plot_best('delta', (r'$BIG^{\Delta}$', r'$GOL^{\Delta}$', r'$VSimple^{\Delta}$', r'$SIMDPackFPF^{\Delta}$'))
+plot_best('delta_min', (r'$BIG^{\Delta min}$', r'$GOL^{\Delta min}$', r'$VSimple^{\Delta min}$', r'$SIMDPackFPF^{\Delta min}$'))

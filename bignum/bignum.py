@@ -3,7 +3,7 @@ import extras.helpers as helpers
 import extras.const as const
 import math
 
-def big_encode(delta_str, n_vertices, base, m=False):
+def encode(delta_str, n_vertices, base, m=False):
     """Encodes delta string as a big integer.
 
     Args:
@@ -37,12 +37,12 @@ def big_encode(delta_str, n_vertices, base, m=False):
     big_num = big_num*const.y_factor + Dy_min
     M_encode = helpers.base_encode(M - 2, base)
     big_str = M_encode + helpers.base_encode(big_num, base) # prefix and postfix not appended
-    if big_decode(big_str, coords, base, m):
+    if decode(big_str, coords, base, m):
         return {'big_str': big_str, 'big_num': big_num, 'M': M, 'bit_len': big_num.bit_length() + M.bit_length(), 'len': len(big_str) - len(M_encode) + 2}
     else:
         return False
 
-def big_decode(big_str, coords, base, m):
+def decode(big_str, coords, base, m):
     """Decodes big number back to delta coordinates
 
     Args:

@@ -8,7 +8,7 @@ from __future__ import division
 from optparse import OptionParser
 import extras.helpers as helpers
 import extras.const as const
-import heuristic.heuristic as heuristic
+import bignum.bignum as bignum
 import std_methods.gzip as gzip
 import math
 import lzw.lzw as lzw
@@ -103,7 +103,7 @@ def main():
     golwin = 0
     for i in range(options.num_to_read):
         assert delta_min_polygons[i] == vle.invert_golomb_trans(golomb_delta_min_encodings[i]['encoding'], const.base, 5)
-        big_delta_min_encoding = heuristic.big_encode(delta_min_polygons[i], 
+        big_delta_min_encoding = bignum.encode(delta_min_polygons[i], 
                                                       data_rows[i]['vertices'] - 1, const.base)
         assert big_delta_min_encoding != False
         gzip_delta_min_encoding = gzip.encode(delta_min_polygons[i])
@@ -112,7 +112,7 @@ def main():
         #Consecutive delta based i.e. x1, y1, x2-x1, y2-y1, x3-x2, y3-y2...  on the original coordinates
         gzip_delta_encoding = gzip.encode(delta_polygons[i])
         assert delta_polygons[i] == vle.invert_golomb_trans(golomb_delta_encodings[i]['encoding'], const.base, 5)
-        big_delta_encoding = heuristic.big_encode(delta_polygons[i], 
+        big_delta_encoding = bignum.encode(delta_polygons[i], 
                                                  data_rows[i]['vertices']  - 2,
                                                  const.base, True)
         assert big_delta_encoding != False
@@ -154,7 +154,7 @@ def main():
             bigwin += 1
         else:
             golwin += 1
-    print '#instances BIG bettter: %d, #instances Golomb better: %d' % (bigwin, golwin)
+    print '#instances BIGNUM bettter: %d, #instances Golomb better: %d' % (bigwin, golwin)
     all_out.close()
     helpers.write_summary('./results/delta_min_summary', stats, algos, '_delta_min_') 
     helpers.write_summary('./results/delta_summary', stats, algos, '_delta_') 
