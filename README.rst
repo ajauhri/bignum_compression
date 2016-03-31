@@ -4,6 +4,7 @@ This code is written for Python 2.7, and tested only on Unix-like operating syst
 
 Usage
 -----
+
 The basic command to run a comparitive study of different compression techniques::
     ./main.py -i $target_name.csv 
 
