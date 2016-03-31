@@ -158,7 +158,7 @@ def get_polygons(ifile):
     fd.close()
     return results
 
-def get_diff_polygon(orig):
+def get_delta_polygon(orig):
     coords_arr = map(lambda x: map(lambda y: int(float(y)*100), x.split(',')), orig.split())
     for i in range(len(coords_arr)):
         if coords_arr[i][1] < 0:
