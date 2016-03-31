@@ -22,9 +22,13 @@ Comparison
 
 For comparison purposes, we considered `TurboPFor <https://github.com/powturbo/TurboPFor>`_ (cloned on October 25, 2015) executed using::
 
-    ./icbench <filename> -f1
+    ./icbench $input_file -f1
 
 Since the above takes a long time to run, you can view the results for each of polygon under the folder ``results/delta_min_state_of_art``  and ``results/delta_state_of_art``. Each filename corresponds to an identification between 1 & 11,370.
 
-Separate file for input to ``icbench`` ``<filename>`` can be taken from folders ``delta_min_polygons`` and ``delta_polygons``. A file for each polygon is generated after running ``main.py``.
+Separate file for each polygon as input to ``icbench`` can be taken from folders ``delta_min_polygons`` and ``delta_polygons``. A file for each polygon is generated after running ``main.py``.
+
+Publications
+------------
+To be updated soon
 
