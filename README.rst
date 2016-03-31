@@ -18,5 +18,5 @@ For comparison purposes, we considered `TurboPFor <https://github.com/powturbo/T
 
     ./icbench <filename> -f1
 
-Since the above takes a long time to run, you can view the results for each of polygon under the folder ``results/del_state_of_art`` 
+Since the above takes a long time to run, you can view the results for each of polygon under the folder ``results/delta_min_state_of_art``  and ``results/delta_state_of_art``. Each filename corresponds to an identification between 1 & 11,370.
 
