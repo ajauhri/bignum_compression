@@ -30,5 +30,5 @@ Separate file for each polygon as input to ``icbench`` can be taken from folders
 
 Publications
 ------------
-To be updated soon
-
+* [Poster](http://abhinavjauhri.com/publications/dcc_poster_2016.pdf)
+* [Paper] (http://arxiv.org/abs/1509.05505)
