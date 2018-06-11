@@ -31,6 +31,9 @@ Separate file for each polygon as input to ``icbench`` can be taken from folders
 
 Publications
 ------------
-* `Poster<https://users.ece.cmu.edu/~ajauhri/publications/dcc_poster_2016.pdf>`_
-* `Paper official<https://ieeexplore.ieee.org/document/7786230/>`_
-* `Paper arXiv<https://arxiv.org/abs/1509.05505>`_
+* `Poster
+  <https://users.ece.cmu.edu/~ajauhri/publications/dcc_poster_2016.pdf>`_
+* `Paper official
+  <https://ieeexplore.ieee.org/document/7786230/>`_
+* `Paper arXiv
+  <https://arxiv.org/abs/1509.05505>`_
