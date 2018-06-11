@@ -18,6 +18,7 @@ Plots can be generated post running the ``main.py`` by::
     ./comparison_plots.py
 
 All plots would be stored under the ``results`` folder.    
+
 Comparison
 ----------
 
