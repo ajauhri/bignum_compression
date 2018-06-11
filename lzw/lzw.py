@@ -1,3 +1,8 @@
+# Copyright (c) 2018, Abhinav Jauhri, Martin Griss, Hakan Erdogmus
+# All rights reserved.
+# Licensed under the BSD 3-Clause license.
+# For full license text, see the LICENSE file in the repo root
+
 # Reference:http://www.cs.cmu.edu/~cil/lzw.and.gif.txt  
 import sys
 import string 

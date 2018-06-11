@@ -16,7 +16,8 @@ Aggregated results after the execution of ``main.py`` can be found under the ``r
 Plots can be generated post running the ``main.py`` by::
 
     ./comparison_plots.py
-    
+
+All plots would be stored under the ``results`` folder.    
 Comparison
 ----------
 

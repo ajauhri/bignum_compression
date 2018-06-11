@@ -1,4 +1,8 @@
 #! /usr/bin/env python
+# Copyright (c) 2018, Abhinav Jauhri, Martin Griss, Hakan Erdogmus
+# All rights reserved.
+# Licensed under the BSD 3-Clause license.
+# For full license text, see the LICENSE file in the repo root
 ''' 
 To run with all WEAs:  ./main.py -i <foobar>.csv 
 To run with first `n` WEAs:  ./main.py -i <foobar>.csv -n <number_of_WEAs_to_be_read>
@@ -154,7 +158,7 @@ def main():
             bigwin += 1
         else:
             golwin += 1
-    print '#instances BIGNUM bettter: %d, #instances Golomb better: %d' % (bigwin, golwin)
+    print '#instances BIGNUM better: %d, #instances Golomb better: %d' % (bigwin, golwin)
     all_out.close()
     helpers.write_summary('./results/delta_min_summary', stats, algos, '_delta_min_') 
     helpers.write_summary('./results/delta_summary', stats, algos, '_delta_') 
